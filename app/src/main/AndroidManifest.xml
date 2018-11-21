@@ -17,8 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ProfilePage" />
-        <activity android:name=".TestMarwan" />
-        <activity android:name=".BarcodeScanner"></activity>
+        <activity android:name=".TestMarwan"></activity>
     </application>
 
 </manifest>
