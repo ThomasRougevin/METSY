@@ -1,8 +1,23 @@
 package com.example.trougevin.metsy;
 
+/////////////////////////////////////////////////////////////
+//      curuser.csv
+/////////////////////////////////////////////////////////////
+//login
+//password
+//mail
+//alergene 1
+//alergene 1
+//alergene 1
+//...
+//
+/////////////////////////////////////////////////////////////
+
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 public class LogPage extends Activity {
 
@@ -13,7 +28,11 @@ public class LogPage extends Activity {
         setContentView(R.layout.activity_log_page);
     }
 
-    public void connexion_click (View view){
+    public void inscription_clk(View view) {
+        Intent intent = new Intent(LogPage.this, ProfilePage.class);
+        startActivity(intent);
+    }
 
+    public void connexion_clk(View view) {
     }
 }
