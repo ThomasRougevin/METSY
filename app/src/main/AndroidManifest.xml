@@ -17,6 +17,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".ProfilePage" />
+        <activity
+            android:name=".AllergiesActivity"
+            android:label="@string/title_activity_allergies"></activity>
     </application>
 
 </manifest>
