@@ -163,16 +163,19 @@ public class BarcodeScanner extends Activity {
                 try {
                     JSONObject jsonResponse = new JSONObject(response);
                     JSONObject jsonObject = jsonResponse.getJSONObject("product");
-                    String allergen = jsonObject.getString("allergens_from_user");
-                    allergen = allergen.substring(4);
+                    String name = jsonObject.getString("product_name");
+                    String allergen = jsonObject.getString("allergens_from_ingredients");
                     String[] allergens = allergen.split(",");
                     String FinalAllergens = "";
 
-                    for(String i:allergens){
-                        FinalAllergens += i+", ";
+                    for (String i : allergens) {
+                        if(i!="") {
+                            FinalAllergens += i + ", ";
+                        }
                     }
-
                     ingredients.setText(FinalAllergens);
+
+                    result.setText(name);
 
 
                 } catch (JSONException e) {
