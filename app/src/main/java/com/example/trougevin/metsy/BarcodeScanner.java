@@ -1,10 +1,7 @@
 package com.example.trougevin.metsy;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Camera;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -12,8 +9,6 @@ import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -21,7 +16,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.common.api.Response;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -31,21 +25,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-public class BarcodeScanner extends Activity {
+
+
+public class BarcodeScanner extends AppCompatActivity {
 
     TextView result;
     TextView ingredients;
-    List ingredientList = new ArrayList();
     SurfaceView camera;
     BarcodeDetector detector;
     CameraSource cameraSource;
     final int RequestCameraPermissionID = 1001;
     String EAN;
-
-    private static final String URL ="https://fr.openfoodfacts.org/api/v0/produit/3029330003533.json";
 
 
     //Demande à l'utilisateur l'autorisation d'acceder à sa camera
@@ -138,7 +129,7 @@ public class BarcodeScanner extends Activity {
                         @Override
                         public void run() {
                             EAN = codes.valueAt(0).displayValue;
-                            result.setText(EAN);
+                            //result.setText(EAN);
                             getAllergens();
 
                         }
@@ -146,9 +137,6 @@ public class BarcodeScanner extends Activity {
                 }
             }
         });
-
-        //EAN = "3029330003533";
-
 
     }
 
@@ -166,11 +154,14 @@ public class BarcodeScanner extends Activity {
                     String name = jsonObject.getString("product_name");
                     String allergen = jsonObject.getString("allergens_from_ingredients");
                     String[] allergens = allergen.split(",");
+
                     String FinalAllergens = "";
 
                     for (String i : allergens) {
                         if(i!="") {
-                            FinalAllergens += i + ", ";
+                            if(!FinalAllergens.contains(i)) {
+                                FinalAllergens += i + ", ";
+                            }
                         }
                     }
                     ingredients.setText(FinalAllergens);
@@ -192,5 +183,6 @@ public class BarcodeScanner extends Activity {
         });
         requestQueue.add(request);
     }
-}
 
+
+}
