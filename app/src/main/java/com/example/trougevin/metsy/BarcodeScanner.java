@@ -25,7 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-
+import java.util.Scanner;
 
 
 public class BarcodeScanner extends AppCompatActivity {
@@ -37,6 +37,9 @@ public class BarcodeScanner extends AppCompatActivity {
     CameraSource cameraSource;
     final int RequestCameraPermissionID = 1001;
     String EAN;
+    String PresentAllergens="";
+    String UserAllergens="";
+    String PrintAllergens = "";
 
 
     //Demande à l'utilisateur l'autorisation d'acceder à sa camera
@@ -153,21 +156,46 @@ public class BarcodeScanner extends AppCompatActivity {
                     JSONObject jsonObject = jsonResponse.getJSONObject("product");
                     String name = jsonObject.getString("product_name");
                     String allergen = jsonObject.getString("allergens_from_ingredients");
+                    String trace = jsonObject.getString("traces");
                     String[] allergens = allergen.split(",");
 
-                    String FinalAllergens = "";
 
-                    for (String i : allergens) {
-                        if(i!="") {
-                            if(!FinalAllergens.contains(i)) {
-                                FinalAllergens += i + ", ";
-                            }
-                        }
+                    Scanner scan = new Scanner(getResources().openRawResource(R.raw.allergens));
+                    while (scan.hasNextLine()) {
+                        String line = scan.nextLine();
+                        String[] col = line.split(",");
+
+                        PresentAllergens="";
+                        UserAllergens="";
+                        PrintAllergens = "";
+
+
+                        for (String i : col) {
+                            if(i!="") {
+                                if(!UserAllergens.contains(i)) {
+                                    UserAllergens += i + ", ";
+                                }
+
+                                i=i.toLowerCase();
+                                for(String j : allergens) {
+                                    if(j!="") {
+                                        if(!PresentAllergens.contains(j)) {
+                                            PresentAllergens += j + ", ";
+                                        }
+                                    }
+                                    j=j.toLowerCase();
+                                    if (i.contains(j)) {
+                                        if(!PrintAllergens.contains(i)) {
+                                            PrintAllergens += i + ", ";
+                                        }
+                                    }
+                                }
+                            }   }
                     }
-                    ingredients.setText(FinalAllergens);
 
+                    //result.setText(name+" Allergènes présents : "+ PresentAllergens + "User allergènes : "+UserAllergens);
+                    ingredients.setText("Allergènes trouvés : "+PrintAllergens);
                     result.setText(name);
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();
