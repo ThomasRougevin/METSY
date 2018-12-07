@@ -5,4 +5,13 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog"> //Popup presence allergenes
+        <item name="android:textColor">#000</item> //couleur du titre
+        <item name="android:textColorPrimary">#DC143C</item> //couleur du message
+    </style>
+    <style name="AlertDialogStyle2" parent="Theme.AppCompat.Light.Dialog"> //Popup 0 allergene
+        <item name="android:textColor">#000</item> //couleur du titre
+        <item name="android:textColorPrimary">#006400</item> //couleur du message
+    </style>
+
 </resources>

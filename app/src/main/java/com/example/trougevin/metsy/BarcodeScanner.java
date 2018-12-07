@@ -4,11 +4,13 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -20,6 +22,7 @@ import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,8 +40,6 @@ public class BarcodeScanner extends AppCompatActivity {
     CameraSource cameraSource;
     final int RequestCameraPermissionID = 1001;
     String EAN;
-    String PresentAllergens="";
-    String UserAllergens="";
     String PrintAllergens = "";
 
 
@@ -68,8 +69,6 @@ public class BarcodeScanner extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode_scanner);
 
-        result = findViewById(R.id.textView1);
-        ingredients = findViewById(R.id.textView2);
         camera = findViewById(R.id.surfaceView);
 
 
@@ -157,6 +156,7 @@ public class BarcodeScanner extends AppCompatActivity {
                     String name = jsonObject.getString("product_name");
                     String allergen = jsonObject.getString("allergens_from_ingredients");
                     String trace = jsonObject.getString("traces");
+                    String imageURL = jsonObject.getString("image_url");
                     String[] allergens = allergen.split(",");
 
 
@@ -165,37 +165,50 @@ public class BarcodeScanner extends AppCompatActivity {
                         String line = scan.nextLine();
                         String[] col = line.split(",");
 
-                        PresentAllergens="";
-                        UserAllergens="";
                         PrintAllergens = "";
 
-
-                        for (String i : col) {
-                            if(i!="") {
-                                if(!UserAllergens.contains(i)) {
-                                    UserAllergens += i + ", ";
-                                }
-
-                                i=i.toLowerCase();
-                                for(String j : allergens) {
-                                    if(j!="") {
-                                        if(!PresentAllergens.contains(j)) {
-                                            PresentAllergens += j + ", ";
-                                        }
-                                    }
-                                    j=j.toLowerCase();
-                                    if (i.contains(j)) {
-                                        if(!PrintAllergens.contains(i)) {
+                            for (String i : col) {
+                                i = i.toUpperCase();
+                                for (String j : allergens) {
+                                    j = j.toUpperCase();
+                                    if (j != "" && i.contains(j)) {
+                                        if (!PrintAllergens.contains(i)) {
                                             PrintAllergens += i + ", ";
                                         }
                                     }
                                 }
-                            }   }
+                            }
                     }
 
-                    //result.setText(name+" Allergènes présents : "+ PresentAllergens + "User allergènes : "+UserAllergens);
-                    ingredients.setText("Allergènes trouvés : "+PrintAllergens);
-                    result.setText(name);
+                    ImageView imageView = new ImageView(BarcodeScanner.this);
+                    Picasso.get()
+                            .load(imageURL)
+                            .into(imageView);
+
+                    if (PrintAllergens != "") {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(BarcodeScanner.this, R.style.AlertDialogStyle);
+                        builder.setTitle(name);
+                        builder.setView(imageView);
+                        builder.setMessage("Attention ! Allergènes présents : " + PrintAllergens);
+
+                        AlertDialog alertDialog = builder.create();
+
+                        if(!alertDialog.isShowing()){
+                            alertDialog.show();
+                        }
+
+                    } else {
+                        AlertDialog.Builder builder2 = new AlertDialog.Builder(BarcodeScanner.this, R.style.AlertDialogStyle2);
+                        builder2.setTitle(name);
+                        builder2.setView(imageView);
+                        builder2.setMessage("Ok ! Aucun allergène trouvé !");
+
+                        AlertDialog alertDialog = builder2.create();
+
+                        if(!alertDialog.isShowing()){
+                            alertDialog.show();
+                        }
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
