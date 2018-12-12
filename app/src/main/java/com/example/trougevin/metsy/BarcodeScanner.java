@@ -4,11 +4,10 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -30,7 +29,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 
@@ -142,6 +140,7 @@ public class BarcodeScanner extends Activity {
                         public void run() {
                             EAN = codes.valueAt(0).displayValue;
                             //result.setText(EAN);
+                            String test = EAN;
                             getAllergens();
 
                         }
@@ -180,7 +179,7 @@ public class BarcodeScanner extends Activity {
 
                         PrintAllergens = "";
 
-                            for (String i : col2) {
+                            for (String i : col) {
                                 i = i.toUpperCase();
                                 for (String j : allergens) {
                                     j = j.toUpperCase();
