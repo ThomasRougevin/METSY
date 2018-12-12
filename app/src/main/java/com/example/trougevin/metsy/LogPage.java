@@ -29,7 +29,7 @@ public class LogPage extends Activity {
     }
 
     public void inscription_clk(View view) {
-        Intent intent = new Intent(LogPage.this, ProfilePage.class);
+        Intent intent = new Intent(LogPage.this, AllergeneActivity.class);
         startActivity(intent);
     }
 

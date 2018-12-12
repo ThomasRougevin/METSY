@@ -13,7 +13,6 @@
         android:layout_height="62dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="3dp"
-        android:text="@string/allergenes_possibles"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
         app:layout_constraintBottom_toTopOf="@+id/allerg_list"
         app:layout_constraintEnd_toStartOf="@+id/button"

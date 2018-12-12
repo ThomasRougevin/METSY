@@ -18,6 +18,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".ProfilePage" />
+        <activity android:name=".BarcodeScanner" />
+        <activity android:name=".AllergeneActivity" />
+
+
     </application>
 
 </manifest>
