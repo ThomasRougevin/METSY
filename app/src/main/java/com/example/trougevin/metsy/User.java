@@ -1,8 +1,14 @@
 package com.example.trougevin.metsy;
 
+import android.annotation.SuppressLint;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class User {
+@SuppressLint("ParcelCreator")
+public class User implements Parcelable {
     private String name;
     private String password;
     private String mail;
@@ -14,6 +20,26 @@ public class User {
         this.mail = mail;
         this.allergens = allergens;
     }
+
+
+    protected User(Parcel in) {
+        name = in.readString();
+        password = in.readString();
+        mail = in.readString();
+        allergens = in.createStringArrayList();
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     public String getName() {
         return name;
@@ -45,5 +71,19 @@ public class User {
 
     public void setAllergens(ArrayList<String> allergens) {
         this.allergens = allergens;
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(password);
+        dest.writeString(mail);
+        dest.writeStringList(allergens);
     }
 }
