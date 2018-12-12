@@ -1,4 +1,4 @@
-package fr.isep.ii3510.assignment3musiclibrary;
+package com.example.trougevin.metsy;
 
 import android.app.Activity;
 import android.content.Intent;
