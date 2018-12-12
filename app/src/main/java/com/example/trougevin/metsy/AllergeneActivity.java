@@ -13,6 +13,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.trougevin.metsy.R;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,14 +27,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+//import butterknife.BindView;
+//import butterknife.ButterKnife;
 
 
 public class AllergeneActivity extends Activity {
 
-    @BindView(R.id.allerg_list) ListView allergList;
-    @BindView(R.id.textView) TextView textview;
+
+
+   ListView allergList;
+   TextView textview;
+
     private ArrayList menuList = new ArrayList<>(), // link to ListView
             AllergeneList = new ArrayList<>(),  //list of allergenes in CSV file
             selected = new ArrayList<>(); //list of selected allergenes. TO COMPARE WITH SCANED FOOD INGREDIENTS
@@ -41,12 +46,17 @@ public class AllergeneActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_band);
+        setContentView(R.layout.activity_allergene);
 
-        ButterKnife.bind(AllergeneActivity.this);
+        allergList = findViewById(R.id.allerg_list);
+        textview = findViewById(R.id.textView);
+
+
 
         allergList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         menuList = AllergeneList;
+
+
 
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>( //creating adapter to bind the array to the listView
@@ -56,7 +66,7 @@ public class AllergeneActivity extends Activity {
 
 
         //READING OF CSV FILE
-        Scanner scanner = new Scanner(getResources().openRawResource(R.raw.allergenes2));
+        Scanner scanner = new Scanner(getResources().openRawResource(R.raw.allergens));
         scanner.nextLine();
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
@@ -97,5 +107,10 @@ public class AllergeneActivity extends Activity {
         //Toast.makeText(this, currentAllergene, Toast.LENGTH_LONG);
         //Toast.makeText(this.currentAllergene,Toast.LENGTH_LONG)
         textview.setText(selected.toString());
+
+
+        Intent intent = new Intent(view.getContext(), BarcodeScanner.class);
+        intent.putExtra("AllergenSelected", selected.toString());
+        startActivity(intent);
     }
 }

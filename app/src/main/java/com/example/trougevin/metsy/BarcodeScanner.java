@@ -1,6 +1,8 @@
 package com.example.trougevin.metsy;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -28,10 +30,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 
-public class BarcodeScanner extends AppCompatActivity {
+public class BarcodeScanner extends Activity {
 
     TextView result;
     TextView ingredients;
@@ -41,6 +44,10 @@ public class BarcodeScanner extends AppCompatActivity {
     final int RequestCameraPermissionID = 1001;
     String EAN;
     String PrintAllergens = "";
+    String AllergenSelected;
+
+    //ArrayList AllergenSelected = new ArrayList<>();
+
 
 
     //Demande à l'utilisateur l'autorisation d'acceder à sa camera
@@ -70,6 +77,9 @@ public class BarcodeScanner extends AppCompatActivity {
         setContentView(R.layout.activity_barcode_scanner);
 
         camera = findViewById(R.id.surfaceView);
+
+        Intent intent = getIntent();
+        AllergenSelected = intent.getStringExtra("AllergenSelected");
 
 
         //import barcode detetector de Google : param = ALL FORMATS (EAN, QR CODE...)
@@ -165,9 +175,12 @@ public class BarcodeScanner extends AppCompatActivity {
                         String line = scan.nextLine();
                         String[] col = line.split(",");
 
+                        String[] col2 = AllergenSelected.split(",");
+
+
                         PrintAllergens = "";
 
-                            for (String i : col) {
+                            for (String i : col2) {
                                 i = i.toUpperCase();
                                 for (String j : allergens) {
                                     j = j.toUpperCase();

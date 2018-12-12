@@ -6,6 +6,10 @@ public class SampleReadFile {
         this.allerg = allerg;
     }
 
+    public SampleReadFile() {
+
+    }
+
     public String getAllerg() {
         return allerg;
     }
