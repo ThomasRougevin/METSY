@@ -69,6 +69,9 @@ public class LogPage extends Activity {
 
             Intent intent = new Intent (LogPage.this, AllergeneActivity.class);
 
+            Bundle b = new Bundle();
+            b.putParcelable("userInfo",user);
+            intent.putExtras(b);
 
             startActivity(intent);
         }
