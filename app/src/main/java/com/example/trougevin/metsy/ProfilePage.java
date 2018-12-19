@@ -17,5 +17,5 @@ public class ProfilePage extends Activity {
 
     }
 
-  
+
 }
