@@ -3,6 +3,7 @@
     package="com.example.trougevin.metsy">
 
     <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,8 +21,7 @@
         <activity android:name=".ProfilePage" />
         <activity android:name=".BarcodeScanner" />
         <activity android:name=".AllergeneActivity" />
-
-
+        <activity android:name=".InscriptionPage"></activity>
     </application>
 
 </manifest>
