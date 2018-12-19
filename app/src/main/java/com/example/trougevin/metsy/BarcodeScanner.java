@@ -196,29 +196,31 @@ public class BarcodeScanner extends Activity {
                             .load(imageURL)
                             .into(imageView);
 
-                    if (PrintAllergens != "") {
+
                         AlertDialog.Builder builder = new AlertDialog.Builder(BarcodeScanner.this, R.style.AlertDialogStyle);
                         builder.setTitle(name);
                         builder.setView(imageView);
                         builder.setMessage("Attention ! Allergènes présents : " + PrintAllergens);
 
-                        AlertDialog alertDialog = builder.create();
-
-                        if(!alertDialog.isShowing()){
-                            alertDialog.show();
-                        }
-
-                    } else {
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(BarcodeScanner.this, R.style.AlertDialogStyle2);
                         builder2.setTitle(name);
                         builder2.setView(imageView);
                         builder2.setMessage("Ok ! Vous pouvez consommer ce produit !");
 
-                        AlertDialog alertDialog = builder2.create();
+                        AlertDialog alertDialog = builder.create();
+                        AlertDialog alertDialog2 = builder2.create();
 
-                        if(!alertDialog.isShowing()){
+                        if (PrintAllergens != "") {
                             alertDialog.show();
-                        }
+                            if(alertDialog.isShowing()){
+                                alertDialog.cancel();
+                            }
+                         
+                        } else {
+
+                            if(!alertDialog2.isShowing()){
+                                alertDialog2.show();
+                            }
                     }
 
                 } catch (JSONException e) {
