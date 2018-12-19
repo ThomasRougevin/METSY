@@ -2,6 +2,7 @@ package com.example.trougevin.metsy;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -42,6 +43,7 @@ public class BarcodeScanner extends Activity {
     final int RequestCameraPermissionID = 1001;
     String EAN;
     String PrintAllergens = "";
+    String AllergenSelected;
 
 
     //Demande à l'utilisateur l'autorisation d'acceder à sa camera
@@ -72,6 +74,10 @@ public class BarcodeScanner extends Activity {
 
         camera = findViewById(R.id.surfaceView);
         result = findViewById(R.id.textView);
+
+        Intent intent = getIntent();
+        AllergenSelected = intent.getStringExtra("AllergenSelected");
+
 
 
 
@@ -168,10 +174,11 @@ public class BarcodeScanner extends Activity {
                     while (scan.hasNextLine()) {
                         String line = scan.nextLine();
                         String[] col = line.split(",");
+                        String[] col2 = AllergenSelected.split(",");
 
                         PrintAllergens = "";
 
-                            for (String i : col) {
+                            for (String i : col2) {
                                 i = i.toUpperCase();
                                 for (String j : allergens) {
                                     j = j.toUpperCase();
@@ -205,7 +212,7 @@ public class BarcodeScanner extends Activity {
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(BarcodeScanner.this, R.style.AlertDialogStyle2);
                         builder2.setTitle(name);
                         builder2.setView(imageView);
-                        builder2.setMessage("Ok ! Aucun allergène trouvé !");
+                        builder2.setMessage("Ok ! Vous pouvez consommer ce produit !");
 
                         AlertDialog alertDialog = builder2.create();
 

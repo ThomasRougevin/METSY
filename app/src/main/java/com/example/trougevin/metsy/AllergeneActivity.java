@@ -100,7 +100,7 @@ public class AllergeneActivity extends Activity {
 
     public void ViewSelectedItems(View view) {
 
-        textview.setText(selected.toString());
+        //textview.setText(selected.toString());
 
 
          Intent intent = new Intent(view.getContext(), BarcodeScanner.class);
