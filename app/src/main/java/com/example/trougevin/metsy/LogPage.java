@@ -1,17 +1,5 @@
 package com.example.trougevin.metsy;
 
-/////////////////////////////////////////////////////////////
-//      curuser.csv
-/////////////////////////////////////////////////////////////
-//login
-//password
-//mail
-//alergene 1
-//alergene 1
-//alergene 1
-//...
-//
-/////////////////////////////////////////////////////////////
 
 import android.app.Activity;
 import android.content.Intent;
@@ -39,7 +27,7 @@ public class LogPage extends Activity {
     }
 
     public void inscription_clk(View view) {
-        Intent intent = new Intent(LogPage.this, ProfilePage.class);
+        Intent intent = new Intent(LogPage.this, InscriptionPage.class);
 
         //intent.putExtra("type", "inscription");
 
@@ -63,8 +51,6 @@ public class LogPage extends Activity {
 
             String [] spl = ret.split("\n");
 
-            TextView bla = findViewById(R.id.txttest);
-            bla.setText(spl[2]);
 
             for (String element : spl){
                 if (i==0)
@@ -82,11 +68,7 @@ public class LogPage extends Activity {
             user = new User (name,mdp,mail,list);
 
             Intent intent = new Intent (LogPage.this, AllergeneActivity.class);
-            //Intent intent = new Intent (LogPage.this, ProfilePage.class);
 
-        /*Bundle b = new Bundle();
-        b.putParcelable("userInfo",user);
-        intent.putExtras(b);*/
 
             startActivity(intent);
         }
