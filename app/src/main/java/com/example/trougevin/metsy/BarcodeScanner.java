@@ -1,13 +1,12 @@
 package com.example.trougevin.metsy;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -32,7 +31,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 
-public class BarcodeScanner extends Activity {
+public class BarcodeScanner extends AppCompatActivity {
 
     TextView result;
     TextView ingredients;
@@ -42,10 +41,6 @@ public class BarcodeScanner extends Activity {
     final int RequestCameraPermissionID = 1001;
     String EAN;
     String PrintAllergens = "";
-    String AllergenSelected;
-
-    //ArrayList AllergenSelected = new ArrayList<>();
-
 
 
     //Demande à l'utilisateur l'autorisation d'acceder à sa camera
@@ -75,9 +70,6 @@ public class BarcodeScanner extends Activity {
         setContentView(R.layout.activity_barcode_scanner);
 
         camera = findViewById(R.id.surfaceView);
-
-        Intent intent = getIntent();
-        AllergenSelected = intent.getStringExtra("AllergenSelected");
 
 
         //import barcode detetector de Google : param = ALL FORMATS (EAN, QR CODE...)
@@ -173,9 +165,6 @@ public class BarcodeScanner extends Activity {
                     while (scan.hasNextLine()) {
                         String line = scan.nextLine();
                         String[] col = line.split(",");
-
-                        String[] col2 = AllergenSelected.split(",");
-
 
                         PrintAllergens = "";
 

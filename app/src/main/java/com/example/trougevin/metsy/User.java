@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 @SuppressLint("ParcelCreator")
@@ -19,6 +18,8 @@ public class User implements Parcelable {
         this.password = password;
         this.mail = mail;
         this.allergens = allergens;
+    }
+    public User() {
     }
 
 

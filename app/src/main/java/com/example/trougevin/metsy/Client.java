@@ -1,5 +1,7 @@
 package com.example.trougevin.metsy;
 
+import android.os.AsyncTask;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,37 +9,32 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import android.icu.util.Output;
-import android.os.AsyncTask;
-import android.widget.TextView;
-
-public class Client extends AsyncTask<Void, Void, Void> {
+public class Client extends AsyncTask<Void, Void, String> {
 
     String dstAddress;
     int dstPort;
     String response = "";
     String sendmsg;
-    String textResponse;
 
-    Client(String addr, int port,String textResponse, String txtsend) {
+    public static String get_message;
+
+    Client(String addr, int port, String txtsend) {
         dstAddress = addr;
         dstPort = port;
 
         sendmsg = txtsend;
-
-        this.textResponse=textResponse;
     }
 
     @Override
-    protected Void doInBackground(Void... arg0) {
+    protected String doInBackground(Void... arg0) {
 
         Socket socket = null;
 
         try {
+            get_message = "none";
             socket = new Socket(dstAddress, dstPort);
 
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(
-                    1024);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1024);
             byte[] buffer = new byte[1024];
 
             int bytesRead;
@@ -48,9 +45,6 @@ public class Client extends AsyncTask<Void, Void, Void> {
 
             InputStream inputStream = socket.getInputStream();
 
-            /*
-             * notice: inputStream.read() will block if no data return
-             */
             while ((bytesRead = inputStream.read(buffer)) != -1) {
                 byteArrayOutputStream.write(buffer, 0, bytesRead);
                 response += byteArrayOutputStream.toString("UTF-8");
@@ -74,15 +68,7 @@ public class Client extends AsyncTask<Void, Void, Void> {
                 }
             }
         }
-        sendmsg = "";
-        return null;
+        get_message = response;
+        return response;
     }
-
-    @Override
-    protected void onPostExecute(Void result) {
-        textResponse = response;
-        super.onPostExecute(result);
-    }
-
 }
-
