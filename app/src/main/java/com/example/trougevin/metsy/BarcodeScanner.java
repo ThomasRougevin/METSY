@@ -71,6 +71,8 @@ public class BarcodeScanner extends Activity {
         setContentView(R.layout.activity_barcode_scanner);
 
         camera = findViewById(R.id.surfaceView);
+        result = findViewById(R.id.textView);
+
 
 
         //import barcode detetector de Google : param = ALL FORMATS (EAN, QR CODE...)
