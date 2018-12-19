@@ -3,6 +3,7 @@ package com.example.trougevin.metsy;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,6 +21,8 @@ public class AllergeneActivity extends Activity {
 
    ListView allergList;
    TextView textview;
+
+   User user;
 
     // link to ListView
             private ArrayList<String> AllergeneList = new ArrayList<>();  //list of allergenes in CSV file
@@ -40,7 +43,10 @@ public class AllergeneActivity extends Activity {
         ArrayList<String> menuList = AllergeneList;
 
 
-
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            user = bundle.getParcelable("userInfo");
+        }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>( //creating adapter to bind the array to the listView
                 AllergeneActivity.this,                           //concerned application

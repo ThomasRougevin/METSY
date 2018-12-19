@@ -122,6 +122,9 @@ public class Serveur {
             compte++;
         }
 
+        if (client.get_message.compareTo("none")==0)
+            return false;
+
         String ret = client.get_message.substring(0,2);
         //if (cmd.compareTo("get") != 0)
         retour = client.get_message;
