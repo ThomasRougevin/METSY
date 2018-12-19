@@ -1,6 +1,7 @@
 package com.example.trougevin.metsy;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -31,7 +32,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 
-public class BarcodeScanner extends AppCompatActivity {
+public class BarcodeScanner extends Activity {
 
     TextView result;
     TextView ingredients;

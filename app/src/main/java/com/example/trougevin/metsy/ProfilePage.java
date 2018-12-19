@@ -2,6 +2,7 @@ package com.example.trougevin.metsy;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.TextView;
 
@@ -62,12 +63,25 @@ public class ProfilePage extends Activity {
 
             if (serveur.send_2(login.getText().toString(),password_1.getText().toString(),"create", mail.getText().toString())) {
                 ret = serveur.retour;
+                finish();
+
+            } else{
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProfilePage.this, R.style.AlertDialogStyle);
+                builder.setTitle("ERROR");
+                builder.setMessage("NOP");
+
+                AlertDialog alertDialog = builder.create();
+
+                if(!alertDialog.isShowing()){
+                    alertDialog.show();
+                }
+
             }
 
             //TextView temp = findViewById(R.id.textView15);
             //temp.setText(ret);
 
-            login.setText(ret);
+           // login.setText(ret);
 
             //if (ret.compareTo(""))
             //finish();
