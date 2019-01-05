@@ -2,6 +2,7 @@ package com.example.trougevin.metsy;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -44,6 +45,11 @@ public class BarcodeScanner extends Activity {
     String EAN;
     String PrintAllergens = "";
     String AllergenSelected;
+
+    //Les variables ci-dessous sont utilisées pour éviter que le scan se fasse
+    //en continue et que plusieurs boites de dialogues se supperposent les unes aux autres
+    int t=0;
+    int y=0;
 
 
     //Demande à l'utilisateur l'autorisation d'acceder à sa camera
@@ -140,17 +146,21 @@ public class BarcodeScanner extends Activity {
                         @Override
                         public void run() {
                             EAN = codes.valueAt(0).displayValue;
-                            //result.setText(EAN);
-                            String test = EAN;
-                            getAllergens();
+                                getAllergens();
+
 
                         }
                     });
+
+
                 }
+
+
             }
         });
 
     }
+
 
 
 
@@ -166,29 +176,34 @@ public class BarcodeScanner extends Activity {
                     String name = jsonObject.getString("product_name");
                     String allergen = jsonObject.getString("allergens_from_ingredients");
                     String trace = jsonObject.getString("traces");
-                    String imageURL = jsonObject.getString("image_url");
+                    String imageURL = jsonObject.getString("image_front_url");
                     String[] allergens = allergen.split(",");
 
 
-                    Scanner scan = new Scanner(getResources().openRawResource(R.raw.allergens));
-                    while (scan.hasNextLine()) {
-                        String line = scan.nextLine();
-                        String[] col = line.split(",");
-                        String[] col2 = AllergenSelected.split(",");
+                    String[] all = AllergenSelected.split(",");
 
-                        PrintAllergens = "";
+                    PrintAllergens = "";
 
-                            for (String i : col2) {
-                                i = i.toUpperCase();
-                                for (String j : allergens) {
-                                    j = j.toUpperCase();
-                                    if (j != "" && i.contains(j)) {
-                                        if (!PrintAllergens.contains(i)) {
-                                            PrintAllergens += i + ", ";
-                                        }
-                                    }
+                    for (String i : all) {
+                        i = i.replaceAll("\\s+","");
+                        i = i.toUpperCase();
+                        for (String j : allergens) {
+                            j = j.replaceAll("\\s+","");
+                            j = j.toUpperCase();
+                            if (j != "" && i.contains(j)) {
+                                if (!PrintAllergens.contains(j)) {
+                                    PrintAllergens += j + ", ";
                                 }
                             }
+                        }
+                    }
+
+                    if(PrintAllergens.endsWith(", "))
+                    {
+                        PrintAllergens = PrintAllergens.substring(0,PrintAllergens.length() - 1);
+                        PrintAllergens = PrintAllergens.substring(0,PrintAllergens.length() - 1);
+
+                        PrintAllergens = PrintAllergens+".";
                     }
 
                     ImageView imageView = new ImageView(BarcodeScanner.this);
@@ -196,17 +211,24 @@ public class BarcodeScanner extends Activity {
                             .load(imageURL)
                             .into(imageView);
 
+                    AlertDialog alertDialog;
+
                     if (PrintAllergens != "") {
                         AlertDialog.Builder builder = new AlertDialog.Builder(BarcodeScanner.this, R.style.AlertDialogStyle);
                         builder.setTitle(name);
                         builder.setView(imageView);
                         builder.setMessage("Attention ! Allergènes présents : " + PrintAllergens);
 
-                        AlertDialog alertDialog = builder.create();
 
-                        if(!alertDialog.isShowing()){
+
+                         alertDialog = builder.create();
+
+
+
+                        if(t==0){
                             alertDialog.show();
                         }
+
 
                     } else {
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(BarcodeScanner.this, R.style.AlertDialogStyle2);
@@ -214,15 +236,41 @@ public class BarcodeScanner extends Activity {
                         builder2.setView(imageView);
                         builder2.setMessage("Ok ! Vous pouvez consommer ce produit !");
 
-                        AlertDialog alertDialog = builder2.create();
+                        alertDialog = builder2.create();
 
-                        if(!alertDialog.isShowing()){
+                        if(t==0){
                             alertDialog.show();
                         }
                     }
 
+                    alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            t=0;
+                        }
+                    });
+
+                    t=1;
+
                 } catch (JSONException e) {
                     e.printStackTrace();
+
+                    if (y==0)
+                    {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(BarcodeScanner.this, R.style.AlertDialogStyle);
+                        builder.setMessage("PRODUIT NON TROUVE");
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
+                        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                y=0;
+                            }
+                        });
+
+                        y=1;
+                    }
+
                 }
 
             }
@@ -230,7 +278,9 @@ public class BarcodeScanner extends Activity {
         },new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                result.setText("failure");
+                //result.setText("failure");
+
+
             }
         });
         requestQueue.add(request);
