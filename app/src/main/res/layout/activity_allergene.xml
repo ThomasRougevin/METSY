@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="14dp"
         android:onClick="ViewSelectedItems"
-        android:text="Selected items"
+        android:text="Scanner"
         app:layout_constraintBottom_toTopOf="@+id/allerg_list"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView"

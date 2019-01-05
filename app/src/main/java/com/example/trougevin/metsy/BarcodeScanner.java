@@ -215,7 +215,7 @@ public class BarcodeScanner extends Activity {
                             if(alertDialog.isShowing()){
                                 alertDialog.cancel();
                             }
-                         
+
                         } else {
 
                             if(!alertDialog2.isShowing()){

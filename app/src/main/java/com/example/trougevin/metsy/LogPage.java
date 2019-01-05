@@ -79,7 +79,7 @@ public class LogPage extends Activity {
         {
             AlertDialog.Builder builder = new AlertDialog.Builder(LogPage.this, R.style.AlertDialogStyle);
             builder.setTitle("ERROR");
-            builder.setMessage("NOP");
+            builder.setMessage("Identifiants invalides");
 
             AlertDialog alertDialog = builder.create();
 
