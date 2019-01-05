@@ -68,7 +68,7 @@ public class InscriptionPage extends Activity {
             } else{
                 AlertDialog.Builder builder = new AlertDialog.Builder(InscriptionPage.this, R.style.AlertDialogStyle);
                 builder.setTitle("ERROR");
-                builder.setMessage("NOP");
+                builder.setMessage("Connexion au serveur impossible");
 
                 AlertDialog alertDialog = builder.create();
 
@@ -80,6 +80,60 @@ public class InscriptionPage extends Activity {
 
 
         }
+        if(test==1){
+            AlertDialog.Builder builder = new AlertDialog.Builder(InscriptionPage.this, R.style.AlertDialogStyle);
+            builder.setTitle("ERROR");
+            builder.setMessage("Veuillez renseigner un nom d'utilisateur");
+
+            AlertDialog alertDialog = builder.create();
+
+            if (!alertDialog.isShowing()) {
+                alertDialog.show();
+            }
+
+        }
+        if(test==2){
+            AlertDialog.Builder builder = new AlertDialog.Builder(InscriptionPage.this, R.style.AlertDialogStyle);
+            builder.setTitle("ERROR");
+            builder.setMessage("Veuillez renseigner un mot de passe");
+
+            AlertDialog alertDialog = builder.create();
+
+            if (!alertDialog.isShowing()) {
+                alertDialog.show();
+            }
+
+        }
+        if(test==3){
+            AlertDialog.Builder builder = new AlertDialog.Builder(InscriptionPage.this, R.style.AlertDialogStyle);
+            builder.setTitle("ERROR");
+            builder.setMessage("Mots de passe différents");
+
+            AlertDialog alertDialog = builder.create();
+
+            if (!alertDialog.isShowing()) {
+                alertDialog.show();
+            }
+
+        }
+        if(test==4){
+            AlertDialog.Builder builder = new AlertDialog.Builder(InscriptionPage.this, R.style.AlertDialogStyle);
+            builder.setTitle("ERROR");
+            builder.setMessage("Veuillez renseigner une adresse mail valide");
+
+            AlertDialog alertDialog = builder.create();
+
+            if (!alertDialog.isShowing()) {
+                alertDialog.show();
+            }
+
+        }
+
+
+
+
+
+
     }
 
 
