@@ -166,61 +166,57 @@ public class BarcodeScanner extends Activity {
                     String name = jsonObject.getString("product_name");
                     String allergen = jsonObject.getString("allergens_from_ingredients");
                     String trace = jsonObject.getString("traces");
-                    String imageURL = jsonObject.getString("image_url");
+                    String imageURL = jsonObject.getString("image_front_url");
                     String[] allergens = allergen.split(",");
 
 
-                    Scanner scan = new Scanner(getResources().openRawResource(R.raw.allergens));
-                    while (scan.hasNextLine()) {
-                        String line = scan.nextLine();
-                        String[] col = line.split(",");
-                        String[] col2 = AllergenSelected.split(",");
+                        String[] all = AllergenSelected.split(",");
 
                         PrintAllergens = "";
 
-                            for (String i : col2) {
-                                i = i.toUpperCase();
-                                for (String j : allergens) {
-                                    j = j.toUpperCase();
-                                    if (j != "" && i.contains(j)) {
-                                        if (!PrintAllergens.contains(i)) {
-                                            PrintAllergens += i + ", ";
-                                        }
+                        for (String i : all) {
+                            i = i.toUpperCase();
+                            for (String j : allergens) {
+                                j = j.toUpperCase();
+                                if (j != "" && i.contains(j)) {
+                                    if (!PrintAllergens.contains(j)) {
+                                        PrintAllergens += j + ", ";
                                     }
                                 }
                             }
-                    }
+                        }
+
 
                     ImageView imageView = new ImageView(BarcodeScanner.this);
                     Picasso.get()
                             .load(imageURL)
                             .into(imageView);
 
-
+                    if (PrintAllergens != "") {
                         AlertDialog.Builder builder = new AlertDialog.Builder(BarcodeScanner.this, R.style.AlertDialogStyle);
                         builder.setTitle(name);
                         builder.setView(imageView);
                         builder.setMessage("Attention ! Allergènes présents : " + PrintAllergens);
 
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
+
+                        if(!alertDialog.isShowing()){
+                            alertDialog.show();
+                        }
+
+                    } else {
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(BarcodeScanner.this, R.style.AlertDialogStyle2);
                         builder2.setTitle(name);
                         builder2.setView(imageView);
                         builder2.setMessage("Ok ! Vous pouvez consommer ce produit !");
 
-                        AlertDialog alertDialog = builder.create();
-                        AlertDialog alertDialog2 = builder2.create();
+                        AlertDialog alertDialog = builder2.create();
+                        alertDialog.show();
 
-                        if (PrintAllergens != "") {
+                        if(!alertDialog.isShowing()){
                             alertDialog.show();
-                            if(alertDialog.isShowing()){
-                                alertDialog.cancel();
-                            }
-
-                        } else {
-
-                            if(!alertDialog2.isShowing()){
-                                alertDialog2.show();
-                            }
+                        }
                     }
 
                 } catch (JSONException e) {
@@ -237,6 +233,5 @@ public class BarcodeScanner extends Activity {
         });
         requestQueue.add(request);
     }
-
 
 }
