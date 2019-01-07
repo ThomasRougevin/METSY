@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -46,6 +45,8 @@ public class AllergeneActivity extends Activity {
         allergList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         ArrayList<String> menuList = AllergeneList;
 
+        int j=0;
+
         //GETTING USER'S PROFILE
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -67,7 +68,10 @@ public class AllergeneActivity extends Activity {
         {
             currentAllergene = i ;
             selected.add(i);
-
+            if(AllergeneList.contains(i)){
+             //   AllergeneList.i.getPostion;
+            }
+            j++;
         }
 
 
@@ -85,23 +89,6 @@ public class AllergeneActivity extends Activity {
             public void afterTextChanged(Editable s) {
             }
         });
-
-        //TEST
-        AlertDialog.Builder builder = new AlertDialog.Builder(AllergeneActivity.this, R.style.AlertDialogStyle);
-        builder.setTitle("TEST_3");
-
-        String temp = "";
-        for (String val : selected){
-            temp = temp +"\n"+val;
-        }
-
-        builder.setMessage(temp);
-
-        AlertDialog alertDialog = builder.create();
-
-        if(!alertDialog.isShowing()){
-            alertDialog.show();
-        }
 
 
         adapter = new ArrayAdapter<>( //creating adapter to bind the array to the listView
@@ -137,24 +124,11 @@ public class AllergeneActivity extends Activity {
                 Serveur serveur = new Serveur ();
 
                 try {
-                    if (serveur.send_2(user.getName(),user.getPassword(),"check", currentAllergene)){
-                        AlertDialog.Builder builder = new AlertDialog.Builder(AllergeneActivity.this, R.style.AlertDialogStyle);
-                        builder.setTitle("SUCCES");
-                        builder.setMessage(currentAllergene);
-
-                        AlertDialog alertDialog = builder.create();
-
-                        if(!alertDialog.isShowing()){
-                            alertDialog.show();
-                        }
-                    }
-                    else{
+                    if (!serveur.send_2(user.getName(),user.getPassword(),"check", currentAllergene)){
                         AlertDialog.Builder builder = new AlertDialog.Builder(AllergeneActivity.this, R.style.AlertDialogStyle);
                         builder.setTitle("ERROR");
                         builder.setMessage(currentAllergene);
-
                         AlertDialog alertDialog = builder.create();
-
                         if(!alertDialog.isShowing()){
                             alertDialog.show();
                         }
