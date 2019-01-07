@@ -203,7 +203,7 @@ public class BarcodeScanner extends Activity {
                         PrintAllergens = PrintAllergens.substring(0,PrintAllergens.length() - 1);
                         PrintAllergens = PrintAllergens.substring(0,PrintAllergens.length() - 1);
 
-                        PrintAllergens = PrintAllergens+".";
+                        PrintAllergens = PrintAllergens+"";
                     }
 
                     ImageView imageView = new ImageView(BarcodeScanner.this);
