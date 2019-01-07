@@ -35,6 +35,7 @@ public class AllergeneActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_allergene);
 
@@ -42,14 +43,37 @@ public class AllergeneActivity extends Activity {
         textview = findViewById(R.id.textView);
         search = findViewById(R.id.searchView);
 
-
         allergList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         ArrayList<String> menuList = AllergeneList;
+
+        //GETTING USER'S PROFILE
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            user = bundle.getParcelable("userInfo");
+            int taille = user.getAllergens().size();
+            for(String i : user.getAllergens()){
+                if(!selected.contains(i)){
+                    selected.add(i);
+                }
+                else{
+                    selected.remove(i);
+                }
+            }
+        }
+
+
+        //GETTING ALLERGENS PREVIOUSLY SELECTED
+        for (String i:user.getAllergens())
+        {
+            currentAllergene = i ;
+            selected.add(i);
+
+        }
+
 
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -59,24 +83,26 @@ public class AllergeneActivity extends Activity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
 
+        //TEST
+        AlertDialog.Builder builder = new AlertDialog.Builder(AllergeneActivity.this, R.style.AlertDialogStyle);
+        builder.setTitle("TEST_3");
 
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            user = bundle.getParcelable("userInfo");
-            int taille = user.getAllergens().size();
-            for(String i : user.getAllergens()){
-                if(!selected.contains(i)){ //changer selecter par AllergeneList p-ê ?
-                    selected.add(i);
-                }
-                else{
-                    selected.remove(i);
-                }
-            }
+        String temp = "";
+        for (String val : selected){
+            temp = temp +"\n"+val;
         }
+
+        builder.setMessage(temp);
+
+        AlertDialog alertDialog = builder.create();
+
+        if(!alertDialog.isShowing()){
+            alertDialog.show();
+        }
+
 
         adapter = new ArrayAdapter<>( //creating adapter to bind the array to the listView
                 AllergeneActivity.this,                           //concerned application
@@ -86,38 +112,20 @@ public class AllergeneActivity extends Activity {
 
         //READING OF CSV FILE
         Scanner scanner = new Scanner(getResources().openRawResource(R.raw.allergens));
-        // scanner.nextLine();
-        //while (scanner.hasNextLine()) {
         String line = scanner.nextLine();
         String[] col = line.split(",");
 
-
-
+        //COPY OF CSV FILE IN LIST VIEW
         for (String i : col)
         {
             if (!AllergeneList.contains(i)) {
                 AllergeneList.add(i);
-
-                Serveur serveur = new Serveur();
-                try {
-                    serveur.send_2(user.getName(), user.getPassword(), "check", i);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
 
             else{
                 AllergeneList.remove(i);
             }
         }
-
-              /*  SampleReadFile sample = new SampleReadFile();
-                sample.setAllerg(line);*/
-                /*if (!AllergeneList.contains(sample.getAllerg())) {
-                    AllergeneList.add(line);
-                }*/
-        //}
-
 
 
         allergList.setAdapter(adapter);
@@ -126,60 +134,58 @@ public class AllergeneActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 currentAllergene = ((TextView)view).getText().toString();
+                Serveur serveur = new Serveur ();
+
+                try {
+                    if (serveur.send_2(user.getName(),user.getPassword(),"check", currentAllergene)){
+                        AlertDialog.Builder builder = new AlertDialog.Builder(AllergeneActivity.this, R.style.AlertDialogStyle);
+                        builder.setTitle("SUCCES");
+                        builder.setMessage(currentAllergene);
+
+                        AlertDialog alertDialog = builder.create();
+
+                        if(!alertDialog.isShowing()){
+                            alertDialog.show();
+                        }
+                    }
+                    else{
+                        AlertDialog.Builder builder = new AlertDialog.Builder(AllergeneActivity.this, R.style.AlertDialogStyle);
+                        builder.setTitle("ERROR");
+                        builder.setMessage(currentAllergene);
+
+                        AlertDialog alertDialog = builder.create();
+
+                        if(!alertDialog.isShowing()){
+                            alertDialog.show();
+                        }
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
                 if(selected.contains(currentAllergene)){
                     selected.remove(currentAllergene);
                 }
                 else{
-
                     selected.add(currentAllergene);
-
-
                 }
             }
         });
-
-/*        search.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if(!s.toString().equals("")){
-                    searchItem(s.toString());
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });*/
     }
 
     public void ViewSelectedItems(View view) {
-
         //textview.setText(selected.toString());
-
-
          Intent intent = new Intent(view.getContext(), BarcodeScanner.class);
          intent.putExtra("AllergenSelected", selected.toString());
          startActivity(intent);
     }
 
-   /*
-    public void searchItem(String textToSearch){
-        for(String item:items){
-            if(!item.contains(textToSearch)){
-                AllergeneList.remove(item);
-                adapter.notifyDataSetChanged();
-            }
-        }
-
-    }*/
+    public void monprofil_clk(View view) {
+        Intent intent = new Intent (AllergeneActivity.this, ProfilePage.class);
+        Bundle b = new Bundle();
+        b.putParcelable("userInfo",user);
+        intent.putExtras(b);
+        startActivity(intent);
+    }
 
 }
-

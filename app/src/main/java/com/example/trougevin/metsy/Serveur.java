@@ -125,11 +125,11 @@ public class Serveur {
         if (client.get_message.compareTo("none")==0)
             return false;
 
-        String ret = client.get_message.substring(0,2);
+        String ret = client.get_message.substring(0,7);
         //if (cmd.compareTo("get") != 0)
         retour = client.get_message;
 
-        if (ret.compareTo("ERR")==0)
+        if (ret.compareTo("FAILLED")==0)
             return false;
         return true;
     }

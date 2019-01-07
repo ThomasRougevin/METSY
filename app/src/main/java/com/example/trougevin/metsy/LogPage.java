@@ -47,6 +47,16 @@ public class LogPage extends Activity {
 
         if (serveur.send_2(login.getText().toString(), password.getText().toString(),"get","none"))
         {
+            AlertDialog.Builder builder = new AlertDialog.Builder(LogPage.this, R.style.AlertDialogStyle);
+            builder.setTitle("TEST");
+            builder.setMessage(serveur.retour);
+
+            AlertDialog alertDialog = builder.create();
+
+            if(!alertDialog.isShowing()){
+                alertDialog.show();
+            }
+
             ret = serveur.retour;
 
             String [] spl = ret.split("\n");
