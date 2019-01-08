@@ -1,3 +1,7 @@
+/****************************************************
+ Ce fichier permet la mmodification du profil de l'utilisateur
+ ***************************************************/
+
 package com.example.trougevin.metsy;
 
 import android.app.Activity;

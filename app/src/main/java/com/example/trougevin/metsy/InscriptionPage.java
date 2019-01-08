@@ -1,3 +1,8 @@
+
+/****************************************************
+ Ce fichier permet l'inscription de l'utilisateur
+ ***************************************************/
+
 package com.example.trougevin.metsy;
 
 import android.app.Activity;

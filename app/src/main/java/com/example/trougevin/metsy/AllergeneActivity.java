@@ -1,3 +1,9 @@
+/**************************************************************
+ Ce fichier permet la gestion des allergènes de l'utilisateur,
+ il peut en sélectionner ou en déselectionner
+ *************************************************************/
+
+
 package com.example.trougevin.metsy;
 
 import android.app.Activity;
@@ -69,7 +75,7 @@ public class AllergeneActivity extends Activity {
             currentAllergene = i ;
             selected.add(i);
             if(AllergeneList.contains(i)){
-             //   AllergeneList.i.getPostion;
+             //AllergeneList.i.getPostion;
             }
             j++;
         }

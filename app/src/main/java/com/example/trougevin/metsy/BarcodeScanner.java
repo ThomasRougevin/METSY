@@ -1,3 +1,11 @@
+/****************************************************************************************************
+Ce fichier permet la détection de l'aliment scanné, puis par rapport aux allergènes de l'utilisateur,
+il va chercher si il a une corrspondance entre ceux présent dans l'aliement et ceux de l'utilisateur,
+les résultats seront affichés sous forme de pop
+****************************************************************************************************/
+
+
+
 package com.example.trougevin.metsy;
 
 import android.Manifest;
@@ -9,7 +17,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -31,13 +38,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 
 public class BarcodeScanner extends Activity {
 
     TextView result;
-    TextView ingredients;
     SurfaceView camera;
     BarcodeDetector detector;
     CameraSource cameraSource;
@@ -47,7 +52,7 @@ public class BarcodeScanner extends Activity {
     String AllergenSelected;
 
     //Les variables ci-dessous sont utilisées pour éviter que le scan se fasse
-    //en continue et que plusieur   s boites de dialogues se supperposent les unes aux autres
+    //en continue et que plusieurs boites de dialogues se supperposent les unes aux autres
     int t = 0;
     int y = 0;
 
@@ -58,12 +63,12 @@ public class BarcodeScanner extends Activity {
         switch (requestCode) {
             case RequestCameraPermissionID: {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {//On vérifie si l'utilisateur nous a donné accès à sa caméra
 
                         return;
                     }
                     try {
-                        cameraSource.start(camera.getHolder());
+                        cameraSource.start(camera.getHolder()); //Ouverture de la caméra
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -81,6 +86,7 @@ public class BarcodeScanner extends Activity {
         camera = findViewById(R.id.surfaceView);
         result = findViewById(R.id.textView);
 
+        //Permet de récupérer les infos de la page précédente (ici la liste des allergènes selectionnés)
         Intent intent = getIntent();
         AllergenSelected = intent.getStringExtra("AllergenSelected");
 
@@ -135,6 +141,7 @@ public class BarcodeScanner extends Activity {
 
             }
 
+            //La fonction ci-dessous permet la détection du code barre et le résultat est stocké dans la variable EAN
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> codes = detections.getDetectedItems();
@@ -159,6 +166,9 @@ public class BarcodeScanner extends Activity {
     }
 
 
+    //Cette fonction permet la recherche du code barre dans la base de donnée Open food fact et nous retourne les allergènes de l'aliment
+    //La focntion va ensuite comparer la liste d'allergène de l'utilisateur ainsi que ceux présent dans l'aliment et si il y a une correspondance ou non,
+    //les résultats seront affichés sur une pop-up
     private void getAllergens() {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -196,32 +206,32 @@ public class BarcodeScanner extends Activity {
                     if (PrintAllergens.endsWith(", ")) {
                         PrintAllergens = PrintAllergens.substring(0, PrintAllergens.length() - 1);
                         PrintAllergens = PrintAllergens.substring(0, PrintAllergens.length() - 1);
-
-                        PrintAllergens = PrintAllergens + "";
                     }
 
-                    ImageView imageView = new ImageView(BarcodeScanner.this);
+                    ImageView imageView = new ImageView(BarcodeScanner.this);//Une image de l'aliment scanné
                     Picasso.get()
                             .load(imageURL)
                             .into(imageView);
 
                     AlertDialog alertDialog;
 
+
+                    //Construction des Pops-up
+
+                    //Pop-up pour allergène trouvé
                     if (PrintAllergens != "") {
                         AlertDialog.Builder builder = new AlertDialog.Builder(BarcodeScanner.this, R.style.AlertDialogStyle);
                         builder.setTitle(name);
                         builder.setView(imageView);
                         builder.setMessage("Attention ! Allergènes présents : " + PrintAllergens);
 
-
                         alertDialog = builder.create();
-
 
                         if (t == 0) {
                             alertDialog.show();
                         }
 
-
+                    //Pop-up pour allergène non trouvé
                     } else {
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(BarcodeScanner.this, R.style.AlertDialogStyle2);
                         builder2.setTitle(name);
@@ -247,11 +257,13 @@ public class BarcodeScanner extends Activity {
                 } catch (JSONException e) {
                     e.printStackTrace();
 
+                    //Pop-up pour un produit non trouvé
                     if (y == 0) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(BarcodeScanner.this, R.style.AlertDialogStyle);
                         builder.setMessage("PRODUIT NON TROUVE");
                         AlertDialog alertDialog = builder.create();
                         alertDialog.show();
+
                         alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                             @Override
                             public void onCancel(DialogInterface dialog) {
@@ -269,13 +281,10 @@ public class BarcodeScanner extends Activity {
         }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //result.setText("failure");
-
-
+                result.setText((CharSequence) error);
             }
         });
         requestQueue.add(request);
     }
-
 
 }
